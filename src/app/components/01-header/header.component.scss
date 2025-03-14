@@ -1,0 +1,150 @@
+@use 'sass:color';
+@use '../../../styles-shared/' as *;
+
+//=============================================================================
+//  Header Text
+//=============================================================================
+
+h1 {
+  display: flex;
+  margin: 0 auto;
+  cursor: default;
+  span {
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    white-space: pre-wrap;
+    text-shadow: 1px 1px $bg-base;
+    &:first-of-type {
+      color: $text-dim;
+    }
+    @include under-900px {
+      font-size: 24px;
+    }
+    @include under-600px {
+      font-size: 20px;
+    }
+  }
+}
+
+//=============================================================================
+//  Buttons
+//=============================================================================
+
+$button-border-radius: 5px;
+
+.button-container {
+  display: flex;
+  gap: 12px;
+  padding: 0 10px;
+  button {
+    @include square(40px);
+    position: relative;
+    border: none;
+    border-radius: $button-border-radius;
+    outline: 1px solid $border-bright;
+    background-color: $bg-very-bright;
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: .3s;
+    cursor: pointer;
+    &#info-button {
+      background-image: url('../../../../public/icons/info.webp');
+    }
+    &#year-picker-button {
+      display: none;
+      background-image: url('../../../../public/icons/calendar.webp');
+      @include under-2500px {
+        display: unset;
+      }
+    }
+    &:before {
+      @include pseudo-overlay;
+      border-radius: $button-border-radius;
+      background-color: color.adjust($bg-dark, $alpha: -0.75);
+      pointer-events: none;
+    }
+    &:after {
+      @include pseudo-overlay($content: '\2715');
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: $button-border-radius;
+      background-color: $bg-bright;
+      color: $text-normal;
+      font-size: 22px;
+      opacity: 0;
+      transition: .2s;
+      pointer-events: none;
+    }
+    &.active:after {
+      opacity: 1;
+    }
+    @include hover {
+      box-shadow: 0 0 3px 3px $shadow-very-bright inset;
+      &:after {
+        box-shadow: 0 0 3px 3px $shadow-brighter inset;
+      }
+      .button-tooltip {
+        display: flex;
+        @include hover {
+          display: none;
+        }
+      }
+      &.active .button-tooltip {
+        display: none;
+      }
+    }
+    @include under-900px {
+      @include square(35px);
+    }
+    @include under-600px {
+      @include square(30px);
+    }
+  }
+}
+
+//=============================================================================
+//  Button Tooltips
+//=============================================================================
+
+$tooltip-offset: 7px;
+$tooltip-offset-initial: 4px;
+
+.button-tooltip {
+  display: none;
+  top: calc(100% + $tooltip-offset);
+  right: 2px;
+  background-color: $bg-medium-dark;
+  animation: button-tooltip-fade-in .3s;
+  @include tooltip;
+  .tooltip-text {
+    margin: 0 3px;
+    padding: 0 2px;
+    color: $text-dim-brighter;
+    font-size: 14px;
+    letter-spacing: .03em;
+  }
+}
+#info-button .button-tooltip {
+  width: 200px;
+}
+#year-picker-button .button-tooltip {
+  width: 220px;
+}
+
+@keyframes button-tooltip-fade-in {
+  0% {
+    opacity: 0;
+    top: calc(100% + $tooltip-offset-initial);
+  }
+  40% {
+    opacity: 0;
+    top: calc(100% + $tooltip-offset-initial);
+  }
+  100% {
+    opacity: 1;
+    top: calc(100% + $tooltip-offset);
+  }
+}

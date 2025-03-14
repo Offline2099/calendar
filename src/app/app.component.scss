@@ -1,0 +1,87 @@
+@use 'sass:color';
+@use '../styles-shared' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: calc(100vh + $footer-height);
+}
+
+//=============================================================================
+//  Header and Footer
+//=============================================================================
+
+@mixin header-or-footer($height, $gradient) {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: $height;
+  background: url('../../public/backgrounds/texture-1.webp'), $gradient;
+}
+
+header {
+  @include header-or-footer($header-height, radial-gradient(black, $bg-dark));
+  padding: 15px 10px;
+  @include under-900px {
+    height: $header-height-under-900px;
+  }
+  @include under-600px {
+    height: $header-height-under-600px;
+    padding-right: 5px;
+  }
+}
+
+footer {
+  @include header-or-footer($footer-height, linear-gradient($bg-dark, black));
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+}
+
+//=============================================================================
+//  Content Container
+//=============================================================================
+
+main {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: 2560px;
+  height: calc(100% - $header-height - $footer-height);
+  margin: 0 auto;
+  @include under-900px {
+    height: calc(100% - $header-height-under-900px - $footer-height);
+  }
+  @include under-600px {
+    height: calc(100% - $header-height-under-600px - $footer-height);
+  }
+}
+
+//=============================================================================
+//  Background Blocker for Year Picker
+//=============================================================================
+
+$blocker-gradient-end: color.adjust($bg-base, $alpha: -0.4);
+$blocker-gradient-mid: color.adjust(black, $alpha: -0.4);
+
+.background-blocker {
+  display: none;
+  @include under-1600px {
+    @include overlay($width: calc(100vw - $year-picker-width));
+    display: block;
+    background: linear-gradient(
+      -45deg,
+      $blocker-gradient-end 0,
+      $blocker-gradient-mid 50%,
+      $blocker-gradient-end 100%
+    );
+    &.hidden {
+      display: none;
+    }
+  }
+  @include under-900px {
+    display: none;
+  }
+}

@@ -1,0 +1,26 @@
+@use './01-colors.scss' as *;
+@use './03-mixins.scss' as *;
+
+@mixin tooltip {
+  flex-direction: column;
+  position: absolute;
+  z-index: 2000;
+  padding: 2px 4px 4px 4px;
+  border: 2px solid $border-bright;
+  border-radius: 6px;
+  box-shadow: 0 0 2px 2px $shadow-dark;
+  text-align: left;
+  user-select: none;
+  .tooltip-header {
+    margin: 0 3px 2px 3px;
+    padding: 0 2px 2px 2px;
+    border-bottom: 1px solid $border-bright;
+    color: $text-normal;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: .03em;
+  }
+  @include hover {
+    display: none;
+  }
+}

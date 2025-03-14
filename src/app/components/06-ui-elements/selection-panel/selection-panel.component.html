@@ -1,0 +1,14 @@
+<!-- Text -->
+<div class="panel-header">{{text()}}:</div>
+
+<!-- Buttons -->
+<div class="panel-body">
+  @for (option of options(); track $index) {
+    <button
+      type="button"
+      [ngClass]="{'selected': selectedIndex() === $index}"
+      (click)="selectIndex($index)">
+      {{option}}
+    </button>
+  }
+</div>

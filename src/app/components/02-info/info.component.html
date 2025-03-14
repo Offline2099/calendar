@@ -1,0 +1,82 @@
+<div class="info-column" (click)="$event.stopPropagation()">
+
+  <div type="button" class="x-button" (click)="hideOverlay()">&#10005;</div>
+
+  <h2>Basic Facts</h2>
+
+  <ul>
+    <li>The <strong>Gregorian calendar</strong> is the calendar used in most parts of the world.</li>
+    <li>The Gregorian calendar was introduced in <strong>1582</strong> by <strong>Pope Gregory XIII</strong> to replace the <strong>Julian calendar</strong>.
+      <ul>
+        <li>The Gregorian calendar is largely based on the Julian calendar.</li>
+        <li>The Julian calendar had been in use since 45 BC. It was designed by Roman and Greek mathematicians and astronomers and implemented by <strong>Julius Caesar</strong>.</li>
+        <li>The Julian calendar was much less accurate. The reform was proposed when the calendar was already about 10 days off from astronomical time.</li>
+      </ul>
+    </li>
+    <li>The Gregorian calendar was not immediately accepted worldwide. In some European countries it was not adopted until the early 20th century. In some places, different calendars are still in use today.</li>
+    <li>The <strong>year 1</strong> in the Gregorian calendar represents the supposed birth year of <strong>Jesus Christ</strong>, a first-century preacher and the central figure of <strong>Christianity</strong>. Although the date has no scientific significance, it does not affect the way in which the calendar works.</li>
+    <li>The Gregorian calendar is not perfectly accurate. Although in theory it can be extended to infinity, the calendar cannot be reliably used on time scales greater than a few thousand years.
+      <ul>
+        <li>The calendar has an error of about one day every 3300 years. This would mean a shift of several days since the beginning of recorded history.</li>
+        <li>The calendar does not take into account that the speed of the Earth's rotation changes with time (thus the length of a day is not constant). This makes the calendar not applicable on geological time scales.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>Calendar Structure</h2>
+
+  <ul>
+    <li>A <strong>year</strong> represents the time it takes the Earth to complete one full orbit around the Sun.
+      <ul>
+        <li>Years are identified by consecutive year numbers.</li>
+        <li>Years with positive numbers (1, 2, 3, etc.) represent the <strong>Common Era</strong> (CE), also called <strong>Anno Domini</strong> (AD).</li>
+        <li>Years before the year 1 are counted backwards and represent the era <strong>Before Christ</strong> (BC).</li>
+        <li>There is no year zero. Year 1 is directly preceded by year 1 BC, which is preceded by year 2 BC, and so on.</li>
+      </ul>
+    </li>
+    <li>One <strong>calendar year</strong> lasts 365 or 366 days.
+      <ul>
+        <li>A <strong>day</strong> represents the time it takes the Earth to complete one full rotation on its axis.</li>
+        <li>Since an astronomical year does not last a whole number of days (it lasts about 365 days, 6 hours, and 9 minutes), the calendar must account for this fact to prevent the accumulation of the error.</li>
+        <li>One <strong>common year</strong> lasts 365 days. Every year that is exactly divisible by 4 (except years exactly divisible by 100, but not those exactly divisible by 400) is a <strong>leap year</strong> that lasts 366 days.</li>
+      </ul>
+    </li>
+    
+    <li>A <strong>century</strong> is a period of 100 years. A <strong>millennium</strong> is a period of 1000 years.
+      <ul>
+        <li>By strict definition, all centuries and millennia must be of the same length, therefore they always start with a year that ends with a '01' and always end with a year that ends with a '00'. For instance, the 19th century starts with 1801 and ends with 1900.</li>
+        <li>In practice, centuries and millennia are often referred to as beginning with a year that ends with a '00' and ending with a year that ends with a '99'. For instance, the 19th century starts with 1800 and ends with 1899. In that case, the 1st century and the 1st millenium last only 99 and 999 years respectively (since there's no year zero).</li>
+      </ul>
+    </li>
+    <li>Years are divided into 12 <strong>months</strong> of 28-31 days. Each year begins on the first day of January and ends on the last day of December.
+      <table>
+        <thead>
+          <tr>
+            <th>Number</th><th>Name</th><th>Length (days)</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of table; track $index) {
+            <tr>
+              <td>{{row.monthNumber}}</td><td>{{row.monthName}}</td>
+              <td>{{row.daysInMonth}}
+                @if (row.daysInMonthForLeapYear) {
+                  <br />({{row.daysInMonthForLeapYear}} in leap years)
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </li>
+    <li>A <strong>calendar date</strong> is a unique reference to a particular day. It can be specified by a combination of the year number, the month number within the year (or the month name), and the day number within the month.</li>
+    <li>A <strong>week</strong> is a period of time equal to 7 days.
+      <ul>
+        <li>Since the number of days in a year is not exactly divisible by 7, years and months start on different days of the week. This is the main reason why the calendar grid changes from year to year.</li>
+        <li>Each year contains 51 or 52 full weeks, with some extra days possibly fitting at the beginning and at the end. However, there are exactly 20871 weeks in 400 Gregorian years, which means that every 400 years apart the calendar grid is identical.</li>
+        <li>Which day is considered the first day of the week varies depending on the country. Usually it is Monday (ISO 8601 standard, Europe, China, Australia), Sunday (North America, South Asia), or Saturday (Middle East, North Africa).</li>
+      </ul>
+    </li>
+  </ul>
+
+</div>

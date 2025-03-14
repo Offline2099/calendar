@@ -1,0 +1,57 @@
+<!-- Month Header -->
+<div class="month-header-container" (click)="toggleMonth()">
+  <div class="month-header">
+    <span class="month-name">{{monthName()}}&ensp;</span>
+    <span class="year-name" [ngStyle]="{'color': yearColor()}">{{yearName()}}</span>
+  </div>
+  <div class="month-number">{{monthNumberText()}}</div>
+</div>
+
+<!-- Calendar Grid -->
+<div class="month-grid-container">
+
+  <!-- Weekday Headers -->
+  @for (weekday of weekdayNames(); track $index) {
+    <div    
+      class="day-block weekday-header"
+      (mouseenter)="setHoveredWeekday($index)"
+      (mouseleave)="setHoveredWeekday(null)">
+      {{weekday}}
+    </div>
+  }
+  
+  <!-- Month Grid -->
+  @for (day of monthGrid(); track $index) {
+    <div 
+      class="day-block"
+      [ngClass]="{
+        'block-hoverable': day,
+        'weekday-hovered': $index % DAYS_IN_WEEK === weekdayHovered
+      }"
+      (mouseenter)="setHoveredDay(day)"
+      (mouseleave)="setHoveredDay(null)">
+      {{day || ''}}
+
+      <!-- Day Tooltip -->
+      @if (day && dayHovered() === day) {
+        <div class="day-tooltip">
+          <div class="tooltip-header">
+            <span>{{day}} </span>
+            <span>{{monthName()}} </span>
+            <span [ngStyle]="{'color': yearColor()}">{{yearName()}}</span>
+          </div>
+          @for (line of difference(); track $index) {
+            @if (line.isDisplayed) {
+              <div class="tooltip-line">
+                <span>{{line.value}}</span>
+                <span class="tail">{{line.tail}}</span>
+              </div>
+            }
+          }
+        </div>
+      }
+      
+    </div>
+  } 
+
+</div>

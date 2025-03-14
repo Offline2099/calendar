@@ -1,1 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+@use './styles-shared' as *;
+
+html,
+body {
+  display: flex;
+  width: 100%;
+  min-width: 320px;
+  margin: 0;
+  background-color: $bg-base;
+  color: $text-normal;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: hsl(120, 100%, 20%, .5);
+  color: #eee;
+}

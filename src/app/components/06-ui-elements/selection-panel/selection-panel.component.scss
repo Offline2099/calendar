@@ -1,0 +1,83 @@
+@use '../../../../styles-shared/' as *;
+
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 10px;
+  animation: fade-in .5s;
+  &.smaller {
+    margin-bottom: 8px;
+  }
+}
+
+//=============================================================================
+//  Panel Header (Text)
+//=============================================================================
+
+.panel-header {
+  display: flex;
+  margin-bottom: 5px;
+  padding: 0 10px;
+  font-size: 18px;
+  letter-spacing: .03em;
+  cursor: default;
+  @include under-1200px {
+    font-size: 17px;
+  }
+}
+
+:host.smaller .panel-header {
+  margin-bottom: 0;
+  font-size: 16px;
+}
+
+//=============================================================================
+//  Panel Body (Buttons)
+//=============================================================================
+
+.panel-body {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 5px;
+  padding-top: 1px;
+  user-select: none;
+  button {
+    display: inline-flex;
+    padding: 2px 10px 3px 10px;
+    border: none;
+    background-color: $bg-medium-dark;
+    color: $text-dim-brighter;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: .02em;
+    transition: .2s;
+    cursor: pointer;
+    &:first-of-type {
+      border-radius: 5px 0 0 5px;
+    }
+    &:last-of-type {
+      border-radius: 0 5px 5px 0;
+    }
+    &.selected {
+      background-color: $bg-very-bright;
+      pointer-events: none;
+    }
+    @include hover {
+      box-shadow: 0 0 3px 3px $shadow-medium inset;
+    }
+    @include under-1920px {
+      font-size: 15px;
+      line-height: 20px;
+    }
+  }
+}
+
+:host.smaller .panel-body {
+  margin-bottom: 0;
+  button {
+    font-size: 14px;
+    line-height: 19px;
+  } 
+} 

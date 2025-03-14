@@ -1,0 +1,33 @@
+@mixin hover {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+@mixin square($size) {
+  width: $size;
+  height: $size;
+}
+
+@mixin overlay($top: 0, $left: 0, $width: 100%, $height: 100%) {
+  position: absolute;
+  top: $top;
+  left: $left;
+  width: $width;
+  height: $height;
+}
+
+@mixin pseudo-overlay($content: '', $top: 0, $left: 0, $width: 100%, $height: 100%) {
+  @include overlay($top, $left, $width, $height);
+  content: $content;
+}
+
+@mixin no-scroll-bar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

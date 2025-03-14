@@ -1,0 +1,242 @@
+@use '../../../../styles-shared/' as *;
+
+:host {
+  display: flex;
+  align-self: flex-start;
+  flex-direction: column;
+  width: 300px;
+  margin: 10px;
+  border: 2px solid $bg-bright;
+  border-radius: 10px;
+  background-color: $bg-bright;
+  transition: .3s;
+  cursor: default;
+  @include under-1920px {
+    max-width: 290px;
+  }
+  @include under-1200px {
+    margin: 5px;
+    max-width: 262px;
+    &.collapsed {
+      border-radius: 8px;
+      border-color: $bg-medium-dark;
+      background-color: $bg-medium-dark;
+    }
+  }
+  &.extra-margin {
+    margin-bottom: 36px;
+  }
+}
+
+//=============================================================================
+//  Month Header
+//=============================================================================
+
+.month-header-container {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding: 2px 5px 6px 5px;
+  border-radius: 10px 10px 0 0;
+  .month-header {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    .month-name,
+    .year-name {
+      font-size: 20px;
+      letter-spacing: 0.05em;
+      white-space: pre-wrap;
+      text-shadow: 1px 1px $bg-dark;
+    }
+    .year-name {
+      color: $text-dim-brighter;
+      font-weight: 500;
+    }
+    @include under-1920px {
+      .month-name,
+      .year-name {
+        font-size: 18px;
+      }
+    }
+    @include under-600px {
+      .month-name,
+      .year-name {
+        font-size: 16px;
+        line-height: 24px;
+      }
+    }
+  }
+  .month-number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 20px;
+    padding: 1px 6px 1px 8px;
+    background-color: $bg-medium-brighter;
+    border-radius: 4px;
+    color: $text-dim-darker;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    user-select: none;
+    @include under-1920px {
+      font-size: 14px;
+    }
+  }
+  @include under-1200px {
+    padding-bottom: 4px;
+    cursor: pointer;
+  }
+}
+
+:host.collapsed {
+  @include under-1200px {
+    .month-header-container {
+      padding-bottom: 2px;
+      .month-number {
+        box-shadow: 0 0 1px 1px $shadow-medium inset;
+      }
+    }
+  }
+}
+
+//=============================================================================
+//  Month Grid
+//=============================================================================
+
+.month-grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 0 0 10px 10px;
+  background-color: $bg-dark;
+  .day-block {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: calc(100% / 7);
+    height: 30px;
+    border-right: 1px solid $border-normal;
+    border-bottom: 1px solid $border-normal;
+    font-size: 16px;
+    transition: .2s;
+    &:nth-of-type(7n) {
+      border-right: none;
+    }
+    @for $i from 1 through 7 {
+      &:nth-last-of-type(#{$i}) {
+        border-bottom: none;
+      }
+    }
+    &:nth-last-of-type(7) {
+      border-bottom-left-radius: 10px;
+    }
+    &:last-of-type {
+      border-bottom-right-radius: 10px;
+    }
+    &.weekday-header {
+      background-color: $bg-medium-dark;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      @include hover {
+        background-color: $bg-medium-brighter;
+      }
+    }
+    &.weekday-hovered {
+      background: $bg-medium-dark;
+    }
+    @include hover {
+      &.block-hoverable {
+        background-color: $bg-medium-dark;
+        box-shadow: 0 0 2px 2px $shadow-medium inset;
+      }
+    }
+    @include under-1920px {
+      font-size: 14px;
+    }
+  }
+}
+
+:host.collapsed {
+  @include under-1200px {
+    .month-grid-container {
+      display: none;
+    }
+  }
+}
+
+//=============================================================================
+//  Day Tooltips
+//=============================================================================
+
+$tooltip-offset: 5px;
+$tooltip-offset-initial: 2px;
+
+.day-tooltip {
+  display: flex;
+  bottom: calc(100% + $tooltip-offset);
+  left: 2px;
+  background: $bg-medium-bright;
+  animation: day-tooltip-fade-in .3s;
+  @include tooltip;
+  .tooltip-header,
+  .tooltip-line {
+    color: $text-bright;
+    white-space: nowrap;
+  }
+  .tooltip-line {
+    margin: 0 3px;
+    padding: 0 2px;
+    & > span {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: .03em;
+      &.tail {
+        color: $text-dim-brighter;
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+.month-grid-container .day-block {
+  &:nth-of-type(7n) .day-tooltip {
+    left: unset;
+    right: 2px;
+  }
+  &:nth-of-type(7n - 1) .day-tooltip {
+    left: unset;
+    right: -50%;
+  }
+  &:nth-of-type(7n - 2) .day-tooltip {
+    left: unset;
+    right: -100%;
+  }
+  &:nth-of-type(7n - 3) .day-tooltip {
+    left: unset;
+    right: -150%;
+  }
+  &:nth-of-type(7n - 4) .day-tooltip {
+    left: -100%
+  }
+  &:nth-of-type(7n - 5) .day-tooltip {
+    left: -50%
+  }
+}
+
+@keyframes day-tooltip-fade-in {
+  0% {
+    opacity: 0;
+    bottom: calc(100% + $tooltip-offset-initial);
+  }
+  40% {
+    opacity: 0;
+    bottom: calc(100% + $tooltip-offset-initial);
+  }
+  100% {
+    opacity: 2;
+    bottom: calc(100% + $tooltip-offset);
+  }
+}

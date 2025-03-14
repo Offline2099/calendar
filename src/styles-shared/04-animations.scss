@@ -1,0 +1,51 @@
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/*
+  The blinking effect is achieved by applying a class with the animation
+  to the element. The seemingly redundant animations have a purpose:
+
+  - the animation would only run if its name differs from the one already
+    applied to the element;
+
+  - the user may click buttons repeatedly while the animation is still
+    running, it would only restart if the animation name changes (as if
+    it was a new, different animation);
+
+  - switching between two classes allows to trigger the blink animation 
+    at any time regardless of the current state and avoid removing those
+    classes on timer.
+*/
+
+@mixin enable-blink($duration) {
+  &.fade-in-1 {
+    animation: fade-in-1 $duration;
+  }
+  &.fade-in-2 {
+    animation: fade-in-2 $duration;
+  }
+}
+
+@keyframes fade-in-1 {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-2 {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

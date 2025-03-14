@@ -1,0 +1,20 @@
+@use '../../../styles-shared/' as *;
+
+:host {
+  gap: 8px;
+  font-size: 14px;
+  letter-spacing: .03em;
+  text-shadow: 1px 1px $bg-base;
+  .row {
+    display: flex;
+    gap: 15px;
+    a {
+      color: $text-dim;
+      text-decoration: none;
+      transition: .2s;
+      @include hover {
+        color: $text-normal;
+      }
+    }
+  }
+}

@@ -1,0 +1,375 @@
+@use 'sass:color';
+@use '../../../styles-shared/' as *;
+
+$bg-gradient-start: $border-brighter;
+$bg-gradient-mid: $bg-bright;
+$bg-gradient-end: $bg-very-dark;
+
+:host {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  width: $year-picker-width;
+  gap: 10px;
+  padding: 15px 10px;
+  background-image: 
+    url('../../../../public/backgrounds/texture-3.webp'),
+    linear-gradient(
+      90deg,
+      $bg-gradient-start 0, $bg-gradient-start 3px,
+      $bg-gradient-mid 3px,
+      $bg-gradient-end 50%, $bg-gradient-end
+    );
+  @include under-2500px {
+    &.minimized {
+      width: 170px;
+    }
+  }
+  @include under-1600px {
+    position: absolute;
+    right: 0;
+    z-index: $overlay-z-index - 1;
+    height: 100%;
+    overflow-y: auto;
+    @include no-scroll-bar;
+    &.minimized {
+      position: relative;
+    }
+  }
+  @include under-1200px {
+    &.minimized {
+      display: none;
+    }
+  }
+  @include under-900px {
+    width: 100%;
+    padding: 15px 8px;
+    background: $bg-very-dark;
+    height: unset;
+    min-height: 100%;
+  }
+}
+
+//=============================================================================
+//  Section
+//=============================================================================
+
+.year-picker-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 5px 10px;
+  border-radius: 10px;
+  animation: fade-in .5s;
+  @include under-900px {
+    padding: 5px 10px;
+    background: $bg-medium-darker;
+  }  
+}
+
+//=============================================================================
+//  Section Header
+//=============================================================================
+
+.section-header {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 5px 10px;
+  border-bottom: 1px solid $border-medium-bright;
+  transition: .3s;
+  cursor: default;
+  .section-header-triangle {
+    display: none;
+    width: 19px;
+    justify-content: center;
+    margin-right: 10px;
+    color: $text-dim;
+    font-size: 14px;
+    transform: rotate(90deg);
+    transition: .2s;
+    @include under-900px {
+      display: inline-flex;
+    }
+    @include under-600px {
+      width: 17px;
+      margin-right: 8px;
+      font-size: 12px;
+    }
+  }
+  .section-header-text {
+    font-size: 20px;
+    letter-spacing: 0.03em;
+    @include under-900px {
+      font-size: 18px;
+    }
+    @include under-600px {
+      font-size: 16px;
+    }
+  }
+  .section-header-caption {
+    @include enable-blink(800ms);
+    display: inline-flex;
+    margin-left: 20px;
+    color: $text-dim-brighter;
+    font-size: 18px;
+    @include under-900px {
+      margin-left: 10px;
+      font-size: 16px;
+      &.century-caption {
+        display: none;
+      }
+    }
+    @include under-600px {
+      font-size: 14px;
+    }
+  }
+  .settings-toggler {
+    display: inline-flex;
+    width: 22px;
+    height: 22px;
+    margin-left: auto;
+    background-size: 75%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../../../../public/icons/settings.webp');
+    opacity: .6;
+    transition: .2s;
+    cursor: pointer;
+    @include hover {
+      opacity: .8;
+    }
+    + app-two-way-buttons {
+      margin-left: 8px;
+    }
+  }
+  app-two-way-buttons {
+    margin-left: auto;
+  }
+  @include under-900px {
+    padding: 3px 10px 2px 10px;
+    border-color: $border-medium-dark;
+    cursor: pointer;
+  }
+  @include under-600px {
+    padding: 3px 5px 2px 5px;
+  }
+}
+
+:host.minimized {
+  @include under-2500px {
+    .section-header {
+      justify-content: center;
+      .section-header-text {
+        text-indent: 0;
+      }
+    }
+  }
+}
+
+.section-collapsed {
+  @include under-900px {
+    .section-header {
+      border-color: transparent;
+      .section-header-triangle {
+        transform: rotate(0deg);
+      }
+      .section-header-caption.century-caption {
+        display: inline-flex;
+      }
+    }
+  }
+}
+
+//=============================================================================
+//  Section Content
+//=============================================================================
+
+.section-body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 10px;
+  .settings-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: #1f1f1f;
+    padding-top: 8px;
+    border-radius: 10px;
+    animation: fade-in .5s;
+  }
+  .section-body-row {
+    display: flex;
+    width: 100%;
+    .row-name {
+      @include enable-blink(500ms);
+      display: flex;
+      width: 150px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      color: $text-dim-brighter;
+      text-align: center;
+      font-size: 15px;
+      letter-spacing: 0.02em;
+    }
+    .buttons-container {
+      @include enable-blink(500ms);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    }
+    @include under-900px {
+      padding: 1px 0 6px 0;
+      border-bottom: 2px solid $border-dark;
+      background-color: $bg-darker;
+      &:last-of-type {
+        border-bottom: none;
+      }
+    }
+    @include under-600px {
+      &.row-collapsed {
+        .row-name {
+          margin: 5px auto 0 auto;
+          padding: 4px 0;
+          border-radius: 5px;
+          background: $bg-medium-darker;
+          cursor: pointer;
+        }
+        .buttons-container {
+          display: none;
+        }
+      } 
+    }
+  }
+  @include under-900px {
+    margin-bottom: 5px;
+  }
+}
+
+.section-collapsed {
+  @include under-900px {
+    .section-body {
+      display: none;
+    }
+  }
+}
+
+//=============================================================================
+//  Buttons
+//=============================================================================
+
+$button-width: 74px;
+$button-margin: 5px;
+
+$button-large-width: 100px;
+$button-large-margin: 8px;
+
+@mixin button-normal {
+  display: inline-flex;
+  background-color: $bg-medium-dark;
+  box-shadow:
+    0 0 2px 2px color.adjust(white, $alpha: -0.975) inset,
+    0 0 1px 1px $shadow-dark;
+  color: $text-normal;
+  pointer-events: unset;
+  @include hover {
+    box-shadow: 
+      0 0 4px 4px color.adjust(white, $alpha: -0.92) inset,
+      0 0 1px 1px $shadow-dark;
+  }
+}
+
+.year-picker-button {
+  justify-content: center;
+  width: $button-width;
+  margin: $button-margin $button-margin 0 0;
+  padding: 3px 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  transition: .2s;
+  animation: fade-in .8s;
+  cursor: pointer;
+  @include button-normal;
+  &:last-of-type {
+    margin-right: 0;
+  }
+  &.button-large {
+    width: $button-large-width;
+    margin: 10px $button-large-margin 0 0;
+    padding: 5px 10px;
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+  &.button-invisible {
+    visibility: hidden;
+  }
+  &.button-selected {
+    background-color: $bg-bright;
+    box-shadow:
+      0 0 2px 2px rgba(255, 255, 0, .15) inset,
+      0 0 1px 1px $bg-dark;
+    color: $text-bright;
+    pointer-events: none;
+  }
+  @include under-900px {
+    &:nth-of-type(5n - 4) {
+      margin-left: calc((100% - $button-width * 5 - $button-margin * 4) / 2);
+    }
+    &:nth-of-type(5n) {
+      margin-right: calc((100% - $button-width * 5 - $button-margin * 4) / 2);
+    }
+    &.button-large {
+      margin-top: 5px;
+      margin-left: 0;
+    }
+  }
+  @include under-600px {
+    font-size: 13px;
+    &:nth-of-type(5n - 4) {
+      margin-left: 0;
+    }
+    &:nth-of-type(5n) {
+      margin-right: 5px;
+    }
+    &:nth-of-type(odd) {  
+      margin-left: calc((100% - $button-width * 2 - 5px) / 2);
+    }
+    &:nth-of-type(even) {  
+      margin-right: calc((100% - $button-width * 2 - 5px) / 2);
+    }
+    &.button-large.button-bc:nth-of-type(odd),
+    &.button-large.button-ce:nth-of-type(even) {
+      margin-left: calc((100% - $button-large-width * 2 - $button-large-margin) / 2);
+      margin-right: 6px;
+    }
+    &.button-large.button-bc:nth-of-type(even),
+    &.button-large.button-ce:nth-of-type(odd) {
+      margin-left: 0;
+      margin-right: calc((100% - $button-large-width * 2 - $button-large-margin) / 2);
+    }
+    &.button-large.button-bc:nth-of-type(5n),
+    &.button-large.button-ce:first-of-type {
+      margin-left: calc((100% - $button-large-width) / 2);
+      margin-right: calc((100% - $button-large-width) / 2);
+    }
+  }
+}
+
+:host.minimized {
+  @include under-2500px {
+    .year-picker-button {
+      display: none;
+      &.button-selected {
+        @include button-normal;
+      }
+    }
+  }
+}

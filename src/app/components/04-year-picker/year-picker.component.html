@@ -1,0 +1,134 @@
+@for (section of sections; track section.id) {
+  @if (section.id !== Section.year || !isPickedCenturyOutOfMillennium()) {
+
+    <!-- Section -->
+    <div class="year-picker-section" [ngClass]="{'section-collapsed': section.isCollapsed}">
+
+      <!-- Section Header -->
+      <div class="section-header" (click)="toggleSection(section)">
+        @if (isPickerOpen() || (isUltraWide$ | async)) {
+
+          <!-- Triangle (Mobile & Tablet) -->
+          <div class="section-header-triangle">&#9654;</div>
+
+          <!-- Header Text & Caption -->
+          <div class="section-header-text">
+            {{section.name.normalState}}
+            @if (section.caption()) {
+              <div
+               class="section-header-caption"
+               [ngClass]="{
+                'fade-in-1': section.id === Section.century && !centuriesFadeInState ||
+                  section.id === Section.year && !yearsFadeInState,
+                'fade-in-2': section.id === Section.century && centuriesFadeInState ||
+                  section.id === Section.year && yearsFadeInState,
+                'century-caption' : section.id === Section.century
+                }">
+               ({{section.caption()}})
+              </div>
+            }
+          </div>
+
+          <!-- Settings Button (Millennia) -->
+          @if (section.id === Section.millennium && isDesktop) {
+            <div class="settings-toggler" (click)="toggleSettings()"></div>
+          }
+
+          <!-- Previous/Next Buttons -->
+          @if (!section.isCollapsed || isDesktop) {
+            <app-two-way-buttons
+              class="smaller"
+              [isLeftDisabled]="
+                section.id === Section.millennium && isMinMillennium() ||
+                (section.id === Section.century && (isMinCentury() || isPickedCenturyOutOfMillennium())) ||
+                (section.id === Section.year && (isMinYear() || isPickedYearOutOfCentury()))"
+              [isRightDisabled]="
+                section.id === Section.millennium && isMaxMillennium() ||
+                (section.id === Section.century && (isMaxCentury() || isPickedCenturyOutOfMillennium())) ||
+                (section.id === Section.year && (isMaxYear() || isPickedYearOutOfCentury()))"
+              (clickEvent)="shiftPeriod(section.id, $event)"
+              (click)="$event.stopPropagation()"
+            />
+          }
+
+        } @else {
+          <div class="section-header-text">{{section.name.minimizedState}}</div>
+        }
+      </div>
+  
+      <!-- Section Body -->
+      <div class="section-body">
+
+        <!-- Settings (Calendar Limits Extension) -->
+        @if (section.id === Section.millennium && isDesktop && isPickerOpen() && isSettingsPanelShown) {
+          <div class="settings-panel">
+            @for (row of settingsPanelRows; track row.id) {
+              <app-selection-panel
+                class="smaller"
+                [text]="row.name"
+                [options]="row.options"
+                [selectedIndex]="row.selectedIndex()"
+                (selectOption)="setCalendarLimits(row, $event)"
+              />
+            }
+          </div>          
+        }
+
+        <!-- Rows -->
+        @for (row of section.rows(); track row.id) {
+          <div class="section-body-row" [ngClass]="{'row-collapsed': row.isCollapsed}">
+
+            <!-- Row Name (Mobile & Tablet) -->
+            @if (!isDesktop && row.name) {
+              <div
+                class="row-name"
+                [ngClass]="{
+                  'fade-in-1': section.id === Section.century && !centuriesFadeInState ||
+                    section.id === Section.year && !yearsFadeInState,
+                  'fade-in-2': section.id === Section.century && centuriesFadeInState ||
+                    section.id === Section.year && yearsFadeInState
+                }"
+                [ngStyle]="{
+                  'background': row.isCollapsed && isMobile ? row.buttons[0].bg : 'transparent'
+                }"
+                (click)="toggleRow(section, row)">
+                {{row.name}}
+              </div>
+            }
+            
+            <!-- Buttons -->
+            <div
+              class="buttons-container"
+              [ngClass]="{
+                'fade-in-1': section.id === Section.century && !centuriesFadeInState ||
+                    section.id === Section.year && !yearsFadeInState,
+                'fade-in-2': section.id === Section.century && centuriesFadeInState ||
+                    section.id === Section.year && yearsFadeInState
+              }">
+              @for (button of row.buttons; track button.id) {
+                <button
+                  class="year-picker-button"
+                  [ngStyle]="{'background': button.bg}"
+                  [ngClass]="{
+                    'button-large': section.id === Section.millennium,
+                    'button-bc': section.id === Section.millennium && button.id < 0,
+                    'button-ce': section.id === Section.millennium && button.id > 0,
+                    'button-invisible': !button.id,
+                    'button-selected': 
+                      (section.id == Section.millennium && button.id === millennium()) ||
+                      (section.id == Section.century && button.id === century()) ||
+                      (section.id == Section.year && button.id == year())
+                  }"
+                  (click)="pickPeriod(section.id, button.id)">
+                  {{button.text}}
+                </button>
+              }
+            </div>
+  
+          </div>
+        }
+        
+      </div>
+    </div>
+  }
+}

@@ -1,0 +1,91 @@
+@use '../../../../styles-shared/' as *;
+
+:host {
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  max-width: 1400px;
+  margin: 10px auto 20px auto;
+  padding: 0 10px;
+  animation: fade-in 1s;
+  @include under-1200px {
+    width: 100%;
+  }
+  @include under-900px {
+    padding-bottom: 140px;
+  }  
+}
+
+//=============================================================================
+//  Header
+//=============================================================================
+
+.year-header {
+  position: relative;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin: 5px 0 15px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid $border-normal;
+  .year-name {
+    @include enable-blink(500ms);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    cursor: default;
+    @include under-600px {
+      font-size: 20px;
+    }
+  }
+  .settings-panel-toggler {
+    @include square(30px);
+    position: absolute;
+    top: 2px;
+    right: 10px;
+    border: none;
+    background-color: transparent;
+    background-size: 75%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../../../../../public/icons/settings.webp');
+    opacity: .6;
+    transition: .2s;
+    cursor: pointer;
+    @include hover {
+      opacity: .8;
+    }
+    @include under-600px {
+      @include square(24px);
+    }
+  }
+  @include under-1200px {
+    padding-bottom: 5px;
+  }
+}
+
+//=============================================================================
+//  Calendar Grid
+//=============================================================================
+
+.year-body {
+  @include enable-blink(500ms);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+  padding: 0 20px;
+  animation: fade-in .5s;
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+  @include under-900px {
+    padding: 0 15px;
+  }
+  @include under-600px {
+    padding: 0;
+  }
+}

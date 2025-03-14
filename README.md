@@ -1,59 +1,25 @@
-# Calendar
+# Calendar App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.8.
+## Project Description
 
-## Development server
+A simple yet powerful application that displays the calendar for any year between 20,000 BC (ice age) and 20,000 AD (deep future) and some additional info.
 
-To start a local development server, run:
+* Has a simple and intuitive UI for selecting any year within multiple millennia. The interface adapts smoothly to small screens of mobile devices.
 
-```bash
-ng serve
-```
+* The calendar grid for each selected year is generated automatically on the fly.
+    
+* There is a menu to choose which weekday should be treated as the first day of the week (and works for any possible weekday).
+    
+* For any day in the calendar grid it shows how many years and how many days have passed since that date or how far it is in the future. If close to the current date, also displays the number of weeks and months.
+    
+* Includes a brief summary of how the commonly used Gregorian calendar works and some basic facts about it.
+    
+* While this project looks very simple from the user's perspective, it has a lot of underlying complexity.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Technical Information
 
-## Code scaffolding
+This project is made with Angular.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+* To run the app in the development mode, run `ng serve` in the project directory. Open [http://localhost:4200](http://localhost:4200) to view it in the browser. The page will reload if you make edits.
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+* To build the app in the production mode, run `ng build` in the project directory. The app will be saved to the `dist/` directory.

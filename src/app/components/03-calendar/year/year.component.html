@@ -1,0 +1,69 @@
+<!-- Header -->
+<div class="year-header">
+  <div
+    class="year-name"
+    [ngClass]="{'fade-in-1': !headerFadeInState, 'fade-in-2': headerFadeInState}">
+    Year {{yearName()}}
+  </div>
+  <app-two-way-buttons
+    [isLeftDisabled]="isMinYear()"
+    [isRightDisabled]="isMaxYear()"
+    (clickEvent)="shiftYear($event)"
+  />
+  <button class="settings-panel-toggler" (click)="toggleSettingsPanel()"></button>
+</div>
+
+<!-- Settings (First Weekday) -->
+@if (isSettingsPanelShown) {
+  <app-selection-panel
+    text="First Weekday"
+    [options]="(weekdays$ | async)!"
+    [selectedIndex]="firstWeekday()"
+    (selectOption)="setFirstWeekday($event)"
+  />
+}
+
+<!-- Months Layout -->
+<div class="year-body" [ngClass]="{'fade-in-1': !gridFadeInState, 'fade-in-2': gridFadeInState}">
+  @if (columnCount$ | async; as columnCount) {
+    @for (column of [].constructor(columnCount); track $index) {
+      <div class="column">
+        <ng-template
+          [ngTemplateOutlet]="months"
+          [ngTemplateOutletContext]="{
+            columnCount: columnCount,
+            column: $index,
+            gridState: gridState()[columnCount]
+          }"
+        />
+      </div>
+    }
+  } @else {
+    <ng-template
+      [ngTemplateOutlet]="months"
+      [ngTemplateOutletContext]="{
+        columnCount: 0,
+        column: 0,
+        gridState: gridState()[0]
+      }"
+    />
+  }
+</div>
+
+<!-- Months Template -->
+<ng-template #months let-columnCount="columnCount" let-column="column" let-gridState="gridState">
+  @for (month of gridState; track $index) {
+    @if (!columnCount || $index % columnCount === column) {
+      <app-month
+        [ngClass]="{
+          'collapsed': gridState[$index] && gridState[$index].isCollapsed,
+          'extra-margin': gridState[$index] && gridState[$index].hasExtraMargin
+        }"
+        [year]="year()"
+        [month]="$index"
+        [firstWeekday]="firstWeekday()"
+        (toggle)="toggleMonth(columnCount, $index)"
+      />
+    }
+  }
+</ng-template>

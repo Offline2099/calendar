@@ -1,0 +1,19 @@
+<h1>
+  <span>Gregorian </span>
+  <span>Calendar</span>
+</h1>
+
+<div class="button-container">
+  @for (button of buttons; track button.id) {
+    <button
+      type="button"
+      [id]="button.id"
+      [ngClass]="{'active': button.isActive()}"
+      (click)="onButtonClick(button.id)">
+      <div class="button-tooltip">
+        <div class="tooltip-header">{{button.tooltip.header}}</div>
+        <div class="tooltip-text">{{button.tooltip.text}}</div>
+      </div>
+    </button>
+  }
+</div>
