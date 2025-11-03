@@ -24,6 +24,6 @@ const FOOTER_LINKS: FooterLink[] = [
 })
 export class FooterComponent {
 
-  footerLinks = FOOTER_LINKS;
+  readonly footerLinks = FOOTER_LINKS;
   
 }

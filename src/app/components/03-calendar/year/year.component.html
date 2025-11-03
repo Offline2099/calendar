@@ -17,7 +17,7 @@
 @if (isSettingsPanelShown) {
   <app-selection-panel
     text="First Weekday"
-    [options]="(weekdays$ | async)!"
+    [options]="weekdays()"
     [selectedIndex]="firstWeekday()"
     (selectOption)="setFirstWeekday($event)"
   />
@@ -25,7 +25,7 @@
 
 <!-- Months Layout -->
 <div class="year-body" [ngClass]="{'fade-in-1': !gridFadeInState, 'fade-in-2': gridFadeInState}">
-  @if (columnCount$ | async; as columnCount) {
+  @if (columnCount(); as columnCount) {
     @for (column of [].constructor(columnCount); track $index) {
       <div class="column">
         <ng-template

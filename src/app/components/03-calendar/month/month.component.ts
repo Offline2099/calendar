@@ -21,6 +21,8 @@ interface DateDifferenceLine {
 })
 export class MonthComponent {
 
+  readonly DAYS_IN_WEEK = DAYS_IN_WEEK;
+
   year = input.required<number>();
   month = input.required<number>();
   firstWeekday = input.required<WeekdayNumber>();
@@ -44,8 +46,6 @@ export class MonthComponent {
   difference = computed<DateDifferenceLine[] | null>(() => 
     this.constructTooltipLines(this.year(), this.month(), this.dayHovered())
   );
-
-  DAYS_IN_WEEK = DAYS_IN_WEEK;
 
   constructor(
     private calendar: CalendarService,

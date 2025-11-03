@@ -1,11 +1,14 @@
-import { Component, model, signal, linkedSignal, computed, effect } from '@angular/core';
-import { NgClass, NgTemplateOutlet, AsyncPipe } from '@angular/common';
-import { Observable, map } from 'rxjs';
+import { Component, Signal, signal, linkedSignal, model, computed, effect } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+// Constants & Enums
+import { ScreenWidthStatus as Width } from '../../../constants/screen-width';
 import { WeekdayNumber } from '../../../types/weekday';
 import { CalendarColumnCount, CalendarGridState } from '../../../types/calendar-layout';
+// Components
 import { TwoWayButtonsComponent } from '../../06-ui-elements/two-way-buttons/two-way-buttons.component';
 import { SelectionPanelComponent } from '../../06-ui-elements/selection-panel/selection-panel.component';
 import { MonthComponent } from '../month/month.component';
+// Services
 import { CalendarService } from '../../../services/calendar.service';
 import { LimitService } from '../../../services/limit.service';
 import { LayoutService } from '../../../services/layout.service';
@@ -13,7 +16,7 @@ import { LayoutService } from '../../../services/layout.service';
 @Component({
   selector: 'app-year',
   imports: [
-    NgClass, NgTemplateOutlet, AsyncPipe,
+    NgClass, NgTemplateOutlet, 
     TwoWayButtonsComponent, SelectionPanelComponent, MonthComponent
   ],
   templateUrl: './year.component.html',
@@ -32,9 +35,9 @@ export class YearComponent {
   gridFadeInState: boolean = false;
 
   isSettingsPanelShown: boolean = false;
-  weekdays$: Observable<string[]>;
+  weekdays = computed<string[]>(() => this.getWeekdayNames(this.layout.width()));
 
-  columnCount$: Observable<CalendarColumnCount>;
+  columnCount: Signal<CalendarColumnCount>;
   previousGridState: CalendarGridState | null = null;
   gridState = linkedSignal<CalendarGridState>(() => 
     this.layout.setGridState(this.year(), this.firstWeekday(), this.previousGridState)
@@ -45,10 +48,7 @@ export class YearComponent {
     private limits: LimitService,
     private layout: LayoutService   
   ) {
-    this.weekdays$ = this.layout.isWide$.pipe(
-      map(isWideScreen => this.getWeekdayNames(isWideScreen))
-    );
-    this.columnCount$ = this.layout.calendarColumnCount$;
+    this.columnCount = this.layout.calendarColumnCount;
     effect(() => {
       if (this.year()) { 
         this.blinkHeader();
@@ -77,9 +77,11 @@ export class YearComponent {
     this.isSettingsPanelShown = !this.isSettingsPanelShown;
   }
 
-  getWeekdayNames(isWideScreen: boolean): string[] {
+  getWeekdayNames(width: Width): string[] {
     return this.calendar.weekdaysAll().map(weekday => 
-      isWideScreen ? weekday.nameFull : weekday.nameShort 
+      width === Width.between1200and1920px || width === Width.over2500px
+       ? weekday.nameFull 
+       : weekday.nameShort 
     );
   }
 

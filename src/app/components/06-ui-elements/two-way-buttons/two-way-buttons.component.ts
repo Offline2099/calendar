@@ -14,10 +14,11 @@ enum Direction {
 })
 export class TwoWayButtonsComponent {
 
+  readonly Direction = Direction;
+
   isLeftDisabled = input<boolean>(false);
   isRightDisabled = input<boolean>(false);
-
-  Direction = Direction;
+  
   clickEvent = output<Direction>();
 
   onClick(direction: Direction): void {

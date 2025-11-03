@@ -6,7 +6,7 @@
 
       <!-- Section Header -->
       <div class="section-header" (click)="toggleSection(section)">
-        @if (isPickerOpen() || (isUltraWide$ | async)) {
+        @if (isPickerOpen() || isUltraWide()) {
 
           <!-- Triangle (Mobile & Tablet) -->
           <div class="section-header-triangle">&#9654;</div>
@@ -30,12 +30,12 @@
           </div>
 
           <!-- Settings Button (Millennia) -->
-          @if (section.id === Section.millennium && isDesktop) {
+          @if (section.id === Section.millennium && isDesktop()) {
             <div class="settings-toggler" (click)="toggleSettings()"></div>
           }
 
           <!-- Previous/Next Buttons -->
-          @if (!section.isCollapsed || isDesktop) {
+          @if (!section.isCollapsed || isDesktop()) {
             <app-two-way-buttons
               class="smaller"
               [isLeftDisabled]="
@@ -60,7 +60,7 @@
       <div class="section-body">
 
         <!-- Settings (Calendar Limits Extension) -->
-        @if (section.id === Section.millennium && isDesktop && isPickerOpen() && isSettingsPanelShown) {
+        @if (section.id === Section.millennium && isDesktop() && isPickerOpen() && isSettingsPanelShown) {
           <div class="settings-panel">
             @for (row of settingsPanelRows; track row.id) {
               <app-selection-panel
@@ -79,7 +79,7 @@
           <div class="section-body-row" [ngClass]="{'row-collapsed': row.isCollapsed}">
 
             <!-- Row Name (Mobile & Tablet) -->
-            @if (!isDesktop && row.name) {
+            @if (!isDesktop() && row.name) {
               <div
                 class="row-name"
                 [ngClass]="{
@@ -89,7 +89,7 @@
                     section.id === Section.year && yearsFadeInState
                 }"
                 [ngStyle]="{
-                  'background': row.isCollapsed && isMobile ? row.buttons[0].bg : 'transparent'
+                  'background': row.isCollapsed && isMobile() ? row.buttons[0].bg : 'transparent'
                 }"
                 (click)="toggleRow(section, row)">
                 {{row.name}}

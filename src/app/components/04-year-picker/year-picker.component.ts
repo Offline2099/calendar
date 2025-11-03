@@ -1,15 +1,18 @@
 import { Component, HostBinding, linkedSignal, model, computed, effect } from '@angular/core';
-import { NgClass, NgStyle, AsyncPipe } from '@angular/common';
-import { Observable } from 'rxjs';
+import { NgClass, NgStyle } from '@angular/common';
+// Constants & Enums
 import { DECADES_IN_CENTURY } from '../../constants/calendar';
 import { SECTIONS } from '../../constants/year-picker-sections';
 import { TimePeriodLong as SectionId } from '../../constants/time-period';
-import { ScreenWidthCategory } from '../../constants/screen-width';
+import { ScreenWidthCategory, ScreenWidthStatus } from '../../constants/screen-width';
 import { YearPickerSection, YearPickerButtonRow, YearPickerButton } from '../../types/year-picker-sections';
+// Interfaces & Types
 import { LimitsExtention } from '../../types/limits-extention.interface';
 import { SettingsPanelRow } from '../../types/limits-panel';
+// Components
 import { TwoWayButtonsComponent } from '../06-ui-elements/two-way-buttons/two-way-buttons.component';
 import { SelectionPanelComponent } from '../06-ui-elements/selection-panel/selection-panel.component';
+// Services
 import { CalendarService } from '../../services/calendar.service';
 import { LimitService } from '../../services/limit.service';
 import { ColorService } from '../../services/color.service';
@@ -18,7 +21,7 @@ import { UtilityService } from '../../services/utility.service';
 
 @Component({
   selector: 'app-year-picker',
-  imports: [NgClass, NgStyle, AsyncPipe, TwoWayButtonsComponent, SelectionPanelComponent],
+  imports: [NgClass, NgStyle, TwoWayButtonsComponent, SelectionPanelComponent],
   templateUrl: './year-picker.component.html',
   styleUrl: './year-picker.component.scss'
 })
@@ -56,9 +59,9 @@ export class YearPickerComponent {
   centuriesFadeInState: boolean = false;
   yearsFadeInState: boolean = false;
 
-  isDesktop: boolean = true;
-  isMobile: boolean = false;
-  isUltraWide$: Observable<boolean>;
+  isDesktop = computed<boolean>(() => this.layout.category() === ScreenWidthCategory.desktop);
+  isMobile = computed<boolean>(() => this.layout.category() === ScreenWidthCategory.desktop);
+  isUltraWide = computed<boolean>(() => this.layout.width() === ScreenWidthStatus.over2500px);
 
   constructor(
     private calendar: CalendarService,
@@ -67,14 +70,11 @@ export class YearPickerComponent {
     private layout: LayoutService,
     private utility: UtilityService
   ) {
-    this.layout.widthCategory$.subscribe(category => {
-      this.isDesktop = category === ScreenWidthCategory.desktop;
-      this.isMobile = category === ScreenWidthCategory.mobile;
-      if (!this.isDesktop) this.limits.setDefaultCalendarLimits();
-    });
-    this.isUltraWide$ = this.layout.isUltraWide$;
     this.sections = this.constructSections();
     this.settingsPanelRows = this.limits.constructLimitsPanel();
+    effect(() => {
+      if (!this.isDesktop()) this.limits.setDefaultCalendarLimits();
+    });
     effect(() => {
       if (this.isPickerOpen()) return;
       this.resetUnfinishedPick();
@@ -210,7 +210,7 @@ export class YearPickerComponent {
   }
 
   toggleSection(section: YearPickerSection): void {
-    if (this.isDesktop) return;
+    if (this.isDesktop()) return;
     section.isCollapsed = !section.isCollapsed;
   }
 

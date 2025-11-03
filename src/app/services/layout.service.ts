@@ -1,10 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Signal, computed } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Observable, map } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+// Constants & Enums
 import * as C from '../constants/calendar';
 import { BREAKPOINTS, ScreenWidthCategory, ScreenWidthStatus } from '../constants/screen-width';
+// Interfaces & Types
 import { WeekdayNumber } from '../types/weekday';
 import { CalendarColumnCount, CalendarGridState, MonthState } from '../types/calendar-layout';
+// Services
 import { CalendarService } from './calendar.service';
 
 interface GridStateParams {
@@ -16,28 +20,23 @@ interface GridStateParams {
   providedIn: 'root'
 })
 export class LayoutService {
+  
+  width: Signal<ScreenWidthStatus>;
+  category: Signal<ScreenWidthCategory>;
 
-  calendarColumnCount$: Observable<CalendarColumnCount>;
-  widthCategory$: Observable<ScreenWidthCategory>;
-  isWide$: Observable<boolean>;
-  isUltraWide$: Observable<boolean>;
+  calendarColumnCount: Signal<CalendarColumnCount>;
 
   constructor(private observer: BreakpointObserver, private calendar: CalendarService) {
     const status$: Observable<ScreenWidthStatus> = 
       this.observer.observe(Object.values(BREAKPOINTS)).pipe(
         map(breakpointState => this.getScreenWidthStatus(breakpointState))
       );
-    this.calendarColumnCount$ = status$.pipe(
-      map(widthStatus => this.getCalendarColumnCount(widthStatus))
+    this.width = toSignal(status$, { requireSync: true });
+    this.category = computed<ScreenWidthCategory>(() => 
+      this.getScreenWidthCategory(this.width())
     );
-    this.widthCategory$ = status$.pipe(
-      map(widthStatus => this.getScreenWidthCategory(widthStatus))
-    );
-    this.isWide$ = status$.pipe(
-      map(widthStatus => this.isScreenWide(widthStatus))
-    );
-    this.isUltraWide$ = status$.pipe(
-      map(widthStatus => this.isScreenUltraWide(widthStatus))
+    this.calendarColumnCount = computed<CalendarColumnCount>(() => 
+      this.getCalendarColumnCount(this.width())
     );
   }
 
@@ -69,15 +68,6 @@ export class LayoutService {
       default:
         return 0;
     }
-  }
-
-  private isScreenWide(status: ScreenWidthStatus): boolean {
-    return status === ScreenWidthStatus.between1920and2500px ||
-      status === ScreenWidthStatus.over2500px;
-  }
-
-  private isScreenUltraWide(status: ScreenWidthStatus): boolean {
-    return status === ScreenWidthStatus.over2500px;
   }
 
   private setMonthStates(params: GridStateParams, isCollapsed: boolean[]): MonthState[] {
